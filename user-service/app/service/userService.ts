@@ -1,11 +1,19 @@
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
 import { SuccessResponse } from '../utility/response';
-
+import { UserRepository } from '../repository/userRepository';
+import { autoInjectable } from 'tsyringe';
+@autoInjectable()
 export class UserService {
-	constructor() {}
+	repository: UserRepository;
+	constructor(repository: UserRepository) {
+		this.repository = repository;
+	}
 
+	// * User Creation & Validation & Login
 	async CreateUser(event: APIGatewayProxyEventV2) {
-		// * User Creation & Validation & Login
+		const body = event.body;
+		console.log(body);
+		await this.repository.CreateUserOperation();
 		return SuccessResponse({
 			message: 'Response CreateUser!',
 		});
