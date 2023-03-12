@@ -16,4 +16,17 @@ export class UserRepository {
 			return result.rows[0] as UserModel;
 		}
 	}
+
+	async findAccount(email: string) {
+		const client = await DBClient();
+		await client.connect();
+		const queryString = 'SELECT user_id, email, password, phone, salt FROM users WHERE email = $1';
+		const values = [email];
+		const result = await client.query(queryString, values);
+		await client.end();
+		if (result.rowCount < 1) {
+			throw new Error("user doen't exist with provided email id!");
+		}
+		return result.rows[0] as UserModel;
+	}
 }

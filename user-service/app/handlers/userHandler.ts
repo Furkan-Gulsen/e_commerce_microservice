@@ -11,15 +11,17 @@ export const Signup = middy((event: APIGatewayProxyEventV2) => {
 	return service.CreateUser(event);
 }).use(bodyParser());
 
-export const Login = async (event: APIGatewayProxyEventV2) => {
-	return service.VerifyUser(event);
-};
+export const Login = middy((event: APIGatewayProxyEventV2) => {
+	return service.UserLogin(event);
+}).use(bodyParser());
 
 export const Verify = async (event: APIGatewayProxyEventV2) => {
 	const httpMethod = event.requestContext.http.method.toUpperCase();
 	switch (httpMethod) {
 		case 'POST':
 			return service.VerifyUser(event);
+		case 'GET':
+			return service.GetVerificationToken(event);
 		default:
 			return ErrorResponse(404, 'Method Not Found');
 	}

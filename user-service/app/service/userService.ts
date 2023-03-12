@@ -5,7 +5,9 @@ import { autoInjectable } from 'tsyringe';
 import { plainToClass } from 'class-transformer';
 import { SignupInput } from '../models/dto/SignupInput';
 import { AppValidationError } from '../utility/errors';
-import { GetHashedPassword, GetSalt } from '../utility/password';
+import { GetHashedPassword, GetSalt, GetToken, ValidatePassword, verifyToken } from '../utility/password';
+import { LoginInput } from '../models/dto/LoginInput';
+import { GenerateAccessCode, SendVerificationCode } from '../utility/notification';
 
 @autoInjectable()
 export class UserService {
@@ -33,21 +35,45 @@ export class UserService {
 
 			return SuccessResponse(data);
 		} catch (error) {
-			console.log('Error in UserService -> CreateUser -> error', error);
+			console.log('Error in UserService -> CreateUser: ', error);
 			return ErrorResponse(500, error);
 		}
 	}
 
 	async UserLogin(event: APIGatewayProxyEventV2) {
-		return SuccessResponse({
-			message: 'Response UserLogin!',
-		});
+		try {
+			const input = plainToClass(LoginInput, event.body);
+			const error = await AppValidationError(input);
+			if (error) return ErrorResponse(404, error);
+
+			const data = await this.repository.findAccount(input.email);
+			const verified = await ValidatePassword(input.password, data.password, data.salt);
+			if (!verified) return ErrorResponse(404, 'Password does not match!');
+			const token = GetToken(data);
+			return SuccessResponse({ token });
+		} catch (error) {
+			console.log('Error in UserService -> UserLogin: ', error);
+			return ErrorResponse(500, error);
+		}
 	}
 
 	async VerifyUser(event: APIGatewayProxyEventV2) {
 		return SuccessResponse({
 			message: 'Response VerifyUser!',
 		});
+	}
+
+	async GetVerificationToken(event: APIGatewayProxyEventV2) {
+		const token = event.headers.authorization;
+		const payload = await verifyToken(token);
+		if (payload) {
+			const { code, expiry } = GenerateAccessCode();
+			// * save on DB to confirm verification
+			const response = await SendVerificationCode(code, payload.phone);
+			return SuccessResponse({
+				message: 'Verification code is sent to your registered mobile number!',
+			});
+		}
 	}
 
 	//* User Profile
