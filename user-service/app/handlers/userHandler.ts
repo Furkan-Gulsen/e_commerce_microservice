@@ -15,7 +15,7 @@ export const Login = middy((event: APIGatewayProxyEventV2) => {
 	return service.UserLogin(event);
 }).use(bodyParser());
 
-export const Verify = async (event: APIGatewayProxyEventV2) => {
+export const Verify = middy((event: APIGatewayProxyEventV2) => {
 	const httpMethod = event.requestContext.http.method.toUpperCase();
 	switch (httpMethod) {
 		case 'POST':
@@ -23,11 +23,11 @@ export const Verify = async (event: APIGatewayProxyEventV2) => {
 		case 'GET':
 			return service.GetVerificationToken(event);
 		default:
-			return ErrorResponse(404, 'Method Not Found');
+			return service.ResponseWithError(event);
 	}
-};
+}).use(bodyParser());
 
-export const Profile = async (event: APIGatewayProxyEventV2) => {
+export const Profile = middy((event: APIGatewayProxyEventV2) => {
 	const httpMethod = event.requestContext.http.method.toUpperCase();
 	switch (httpMethod) {
 		case 'POST':
@@ -37,11 +37,11 @@ export const Profile = async (event: APIGatewayProxyEventV2) => {
 		case 'GET':
 			return service.GetProfile(event);
 		default:
-			return ErrorResponse(404, 'Method Not Found');
+			return service.ResponseWithError(event);
 	}
-};
+}).use(bodyParser());
 
-export const Cart = async (event: APIGatewayProxyEventV2) => {
+export const Cart = middy((event: APIGatewayProxyEventV2) => {
 	const httpMethod = event.requestContext.http.method.toUpperCase();
 	switch (httpMethod) {
 		case 'POST':
@@ -51,11 +51,11 @@ export const Cart = async (event: APIGatewayProxyEventV2) => {
 		case 'GET':
 			return service.GetCart(event);
 		default:
-			return ErrorResponse(404, 'Method Not Found');
+			return service.ResponseWithError(event);
 	}
-};
+}).use(bodyParser());
 
-export const Payment = async (event: APIGatewayProxyEventV2) => {
+export const Payment = middy((event: APIGatewayProxyEventV2) => {
 	const httpMethod = event.requestContext.http.method.toUpperCase();
 	switch (httpMethod) {
 		case 'POST':
@@ -65,6 +65,6 @@ export const Payment = async (event: APIGatewayProxyEventV2) => {
 		case 'GET':
 			return service.GetPaymentMethod(event);
 		default:
-			return ErrorResponse(404, 'Method Not Found');
+			return service.ResponseWithError(event);
 	}
-};
+}).use(bodyParser());

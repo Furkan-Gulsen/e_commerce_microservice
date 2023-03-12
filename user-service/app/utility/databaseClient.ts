@@ -6,6 +6,6 @@ export const DBClient = () => {
 		user: 'root',
 		password: 'root',
 		database: 'user_service',
-		port: 5432,
+		port: 5433,
 	});
 };
