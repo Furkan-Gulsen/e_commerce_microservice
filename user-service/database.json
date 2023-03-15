@@ -4,6 +4,7 @@
 		"host": "localhost",
 		"user": "root",
 		"password": "root",
-		"database": "user_service"
+		"database": "user_service",
+		"port": 5433
 	}
 }
