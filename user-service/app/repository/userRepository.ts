@@ -91,4 +91,15 @@ export class UserRepository extends DBOpreation {
 
 		return userProfile;
 	}
+
+	async editProfile(user_id: number, { firstName, lastName, userType, address: { addressLine1, addressLine2, city, postCode, country } }: ProfileInput) {
+		await this.updateUser(user_id, firstName, lastName, userType);
+		const addressQuery = 'UPDATE address SET address_line1=$1, address_line2=$2, city=$3, post_code=$4, country=$5 WHERE user_id=$6 RETURNING *';
+		const addressValues = [addressLine1, addressLine2, city, postCode, country, user_id];
+		const addressResult = await this.executeQuery(addressQuery, addressValues);
+		if (addressResult.rowCount < 1) {
+			throw new Error('Error while editing profile!');
+		}
+		return true;
+	}
 }

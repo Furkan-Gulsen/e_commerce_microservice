@@ -110,25 +110,33 @@ export class UserService {
 
 	//* User Profile
 	async CreateProfile(event: APIGatewayProxyEventV2) {
-		const token = event.headers.authorization;
-		const payload = await verifyToken(token);
-		if (!payload) return ErrorResponse(403, 'Authorization failed!');
-
-		const input = plainToClass(ProfileInput, event.body);
-		const error = await AppValidationError(input);
-		if (error) return ErrorResponse(404, error);
-
-		const result = await this.repository.createProfile(payload.user_id, input);
-		console.log('result', result);
-
-		return SuccessResponse({
-			message: 'Response from Create User Profile!',
-		});
+		try {
+			const token = event.headers.authorization;
+			const payload = await verifyToken(token);
+			if (!payload) return ErrorResponse(403, 'Authorization failed!');
+			const input = plainToClass(ProfileInput, event.body);
+			const error = await AppValidationError(input);
+			if (error) return ErrorResponse(404, error);
+			await this.repository.createProfile(payload.user_id, input);
+			return SuccessResponse({
+				message: 'Response from Create User Profile!',
+			});
+		} catch (error) {
+			console.log('Error in UserService -> CreateProfile: ', error);
+			return ErrorResponse(500, error);
+		}
 	}
 
 	async EditProfile(event: APIGatewayProxyEventV2) {
+		const token = event.headers.authorization;
+		const payload = await verifyToken(token);
+		if (!payload) return ErrorResponse(403, 'Authorization failed!');
+		const input = plainToClass(ProfileInput, event.body);
+		const error = await AppValidationError(input);
+		if (error) return ErrorResponse(404, error);
+		await this.repository.editProfile(payload.user_id, input);
 		return SuccessResponse({
-			message: 'Response EditProfile!',
+			message: 'Profile Updated!',
 		});
 	}
 
