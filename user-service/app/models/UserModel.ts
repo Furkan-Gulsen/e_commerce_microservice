@@ -1,5 +1,7 @@
+import { AddressModel } from './AddressModel';
+
 export interface UserModel {
-	user_id?: string;
+	user_id?: number;
 	email: string;
 	password: string;
 	phone: string;
@@ -10,4 +12,5 @@ export interface UserModel {
 	last_name?: string;
 	profile_pic?: string;
 	expiry?: string;
+	address?: AddressModel[];
 }

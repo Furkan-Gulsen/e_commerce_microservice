@@ -10,6 +10,7 @@ import { LoginInput } from '../models/dto/LoginInput';
 import { GenerateAccessCode } from '../utility/notification';
 import { VerificationInput } from '../models/dto/UpdateInput';
 import { TimeDifference } from '../utility/datahelper';
+import { ProfileInput } from '../models/dto/AddressInput';
 
 @autoInjectable()
 export class UserService {
@@ -109,8 +110,19 @@ export class UserService {
 
 	//* User Profile
 	async CreateProfile(event: APIGatewayProxyEventV2) {
+		const token = event.headers.authorization;
+		const payload = await verifyToken(token);
+		if (!payload) return ErrorResponse(403, 'Authorization failed!');
+
+		const input = plainToClass(ProfileInput, event.body);
+		const error = await AppValidationError(input);
+		if (error) return ErrorResponse(404, error);
+
+		const result = await this.repository.createProfile(payload.user_id, input);
+		console.log('result', result);
+
 		return SuccessResponse({
-			message: 'Response CreateProfile!',
+			message: 'Response from Create User Profile!',
 		});
 	}
 
@@ -121,9 +133,11 @@ export class UserService {
 	}
 
 	async GetProfile(event: APIGatewayProxyEventV2) {
-		return SuccessResponse({
-			message: 'Response GetProfile!',
-		});
+		const token = event.headers.authorization;
+		const payload = await verifyToken(token);
+		if (!payload) return ErrorResponse(403, 'Authorization failed!');
+		const result = await this.repository.getUserProfile(payload.user_id);
+		return SuccessResponse(result);
 	}
 
 	// * Cart Section
