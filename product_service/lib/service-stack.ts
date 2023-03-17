@@ -13,6 +13,8 @@ export class ServiceStack extends Construct {
 	constructor(scope: Construct, id: string, props: ServiceProps) {
 		super(scope, id);
 		const nodeJsFunctionProps: NodejsFunctionProps = {
+			// * The "bundling" attribute specifies that the function must contain external modules.
+			// * This feature allows the "aws-sdk" module to be used by the function.
 			bundling: {
 				externalModules: ['aws-sdk'],
 			},
