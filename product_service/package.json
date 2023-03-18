@@ -26,6 +26,7 @@
 		"class-transformer": "^0.5.1",
 		"class-validator": "^0.14.0",
 		"constructs": "^10.0.0",
+		"mongoose": "^7.0.2",
 		"source-map-support": "^0.5.21"
 	}
 }
