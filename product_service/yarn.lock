@@ -582,6 +582,23 @@
     "@jridgewell/resolve-uri" "3.1.0"
     "@jridgewell/sourcemap-codec" "1.4.14"
 
+"@middy/core@^4.2.8":
+  version "4.2.8"
+  resolved "https://registry.yarnpkg.com/@middy/core/-/core-4.2.8.tgz#869668c894b94688133d9b147c7e622263bf40d5"
+  integrity sha512-cz3nec4THgolPk3iK4JCxzXSJXudm0QlUFNRYl8JpcdY1vYSnlPuDZo6aKEFbh8+A5gBs04cGwMcnH/GTtNX6w==
+
+"@middy/http-json-body-parser@^4.2.8":
+  version "4.2.8"
+  resolved "https://registry.yarnpkg.com/@middy/http-json-body-parser/-/http-json-body-parser-4.2.8.tgz#e01a9627de4b53d78f2fffacd0d0f5cd3c351506"
+  integrity sha512-LBmz9CQEV2/KtT18LNQi/rwRX1+pHRlRslkPzdJfNmOTOyaqk5znSjHZ8dxQdDws2IHe3YWdqgO9R8mBvP98tQ==
+  dependencies:
+    "@middy/util" "4.2.8"
+
+"@middy/util@4.2.8":
+  version "4.2.8"
+  resolved "https://registry.yarnpkg.com/@middy/util/-/util-4.2.8.tgz#848bc272dafdffbee00018d25e5bd23a313269c5"
+  integrity sha512-gnL4bEWTRpIiPHPgxCNnxYQ6x4IAPWxUklEwN7VPnUKyzG10P3Nt0QVfbHZeEtA/SxBC9jwK8h/zaOvN0kvyCA==
+
 "@sinclair/typebox@^0.25.16":
   version "0.25.24"
   resolved "https://registry.yarnpkg.com/@sinclair/typebox/-/typebox-0.25.24.tgz#8c7688559979f7079aacaf31aa881c3aa410b718"

@@ -4,6 +4,7 @@ import { ProductInput } from '../dto/product-input';
 import { ProductRepository } from '../repository/product-repository';
 import { AppValidationError } from '../utility/errors';
 import { ErrorResponse, SuccessResponse } from '../utility/response';
+import { CategoryRepository } from '../repository/cateogry-repository';
 
 export class ProductService {
 	_repository: ProductRepository;
@@ -16,6 +17,7 @@ export class ProductService {
 		const error = await AppValidationError(input);
 		if (error) return ErrorResponse(404, error);
 		const data = await this._repository.createProduct(input);
+		await new CategoryRepository().addItem({ id: input.category_id, products: [data._id] });
 		return SuccessResponse(data);
 	}
 
@@ -46,7 +48,8 @@ export class ProductService {
 	async deleteProduct(event: APIGatewayEvent) {
 		const productId = event.pathParameters?.id;
 		if (!productId) return ErrorResponse(404, 'Product id not found');
-		const data = await this._repository.deleteProduct(productId);
-		return SuccessResponse(data);
+		const { category_id, deleteRes } = await this._repository.deleteProduct(productId);
+		await new CategoryRepository().removeItem({ id: category_id, products: [productId] });
+		return SuccessResponse(deleteRes);
 	}
 }
