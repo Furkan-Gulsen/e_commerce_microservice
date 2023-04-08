@@ -1,4 +1,4 @@
-import { LambdaIntegration, LambdaRestApi, RestApi } from 'aws-cdk-lib/aws-apigateway';
+import { LambdaIntegration, RestApi } from 'aws-cdk-lib/aws-apigateway';
 import { IFunction } from 'aws-cdk-lib/aws-lambda';
 import { Construct } from 'constructs';
 import { aws_apigateway } from 'aws-cdk-lib';
