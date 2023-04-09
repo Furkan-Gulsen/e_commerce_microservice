@@ -8,7 +8,7 @@ export class ProductServiceStack extends cdk.Stack {
 	constructor(scope: Construct, id: string, props?: cdk.StackProps) {
 		super(scope, id, props);
 		const { bucket } = new S3BucketStack(this, 'productImages');
-		const { productService, categoryService, dealsService, imageService } = new ServiceStack(this, 'ProductService', {
+		const { productService, categoryService, dealsService, imageService, queueService } = new ServiceStack(this, 'ProductService', {
 			bucket: bucket.bucketName,
 		});
 		bucket.grantReadWrite(imageService);
@@ -17,6 +17,7 @@ export class ProductServiceStack extends cdk.Stack {
 			categoryService,
 			dealsService,
 			imageService,
+			queueService,
 		});
 	}
 }

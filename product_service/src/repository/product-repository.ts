@@ -23,7 +23,7 @@ export class ProductRepository {
 	}
 
 	async getProductById(id: string) {
-		return products.findById(id);
+		return (await products.findById(id)) as ProductDoc;
 	}
 
 	async updateProduct({ id, name, description, category_id, image_url, price, availability }: ProductInput) {
