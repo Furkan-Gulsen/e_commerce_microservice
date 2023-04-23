@@ -3,6 +3,7 @@ import middy from '@middy/core';
 import bodyParser from '@middy/http-json-body-parser';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
 import { UserService } from '../service/userService';
+import { HttpTypes } from '../utility/httpTypes';
 
 const service = container.resolve(UserService);
 
@@ -17,9 +18,9 @@ export const Login = middy((event: APIGatewayProxyEventV2) => {
 export const Verify = middy((event: APIGatewayProxyEventV2) => {
 	const httpMethod = event.requestContext.http.method.toUpperCase();
 	switch (httpMethod) {
-		case 'POST':
+		case HttpTypes.post:
 			return service.VerifyUser(event);
-		case 'GET':
+		case HttpTypes.get:
 			return service.GetVerificationToken(event);
 		default:
 			return service.ResponseWithError(event);
@@ -29,11 +30,11 @@ export const Verify = middy((event: APIGatewayProxyEventV2) => {
 export const Profile = middy((event: APIGatewayProxyEventV2) => {
 	const httpMethod = event.requestContext.http.method.toUpperCase();
 	switch (httpMethod) {
-		case 'POST':
+		case HttpTypes.post:
 			return service.CreateProfile(event);
-		case 'PUT':
+		case HttpTypes.put:
 			return service.EditProfile(event);
-		case 'GET':
+		case HttpTypes.get:
 			return service.GetProfile(event);
 		default:
 			return service.ResponseWithError(event);
@@ -43,11 +44,11 @@ export const Profile = middy((event: APIGatewayProxyEventV2) => {
 export const Cart = middy((event: APIGatewayProxyEventV2) => {
 	const httpMethod = event.requestContext.http.method.toUpperCase();
 	switch (httpMethod) {
-		case 'POST':
+		case HttpTypes.post:
 			return service.CreateCart(event);
-		case 'PUT':
+		case HttpTypes.put:
 			return service.UpdateCart(event);
-		case 'GET':
+		case HttpTypes.get:
 			return service.GetCart(event);
 		default:
 			return service.ResponseWithError(event);
@@ -57,11 +58,11 @@ export const Cart = middy((event: APIGatewayProxyEventV2) => {
 export const Payment = middy((event: APIGatewayProxyEventV2) => {
 	const httpMethod = event.requestContext.http.method.toUpperCase();
 	switch (httpMethod) {
-		case 'POST':
+		case HttpTypes.post:
 			return service.CreatePaymentMethod(event);
-		case 'PUT':
+		case HttpTypes.put:
 			return service.UpdatePaymentMethod(event);
-		case 'GET':
+		case HttpTypes.get:
 			return service.GetPaymentMethod(event);
 		default:
 			return service.ResponseWithError(event);
